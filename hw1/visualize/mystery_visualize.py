@@ -20,20 +20,21 @@ def colormapArray(X, colors):
     X_copy=np.copy(X)
     vmin=np.nanmin(X)
     vmax=np.nanmax(X)
-
+    N=colors.shape[0]
+    
     if vmin==vmax:
-        N=colors.shape[0]
-        middle=colors[N//2]
-        color_unit8=(middle*255).astype(np.uint8)
+        middle=colors[(N-1)//2]
+        color_unit8=(middle*(N-1).astype(np.uint8)
         return np.tile(color_unit8,(X_copy.shape[0],X_copy.shape[1],1))
     
     X_copy[np.isnan(X_copy)]=vmin
-    N=colors.shape[0]
+    X_copy[np.isinf(X_copy)]=vmax
+    
     index=(N-1)*(X_copy-vmin)/(vmax-vmin)
     index=index.astype(np.int32)
 
     color_image=colors[index]
-    final=(color_image*255).astype(np.uint8)
+    final=(color_image*(N-1).astype(np.uint8)
     return final
 
 
